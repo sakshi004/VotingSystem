@@ -20,7 +20,7 @@
   canvas{
     width: 100%;
   }
-  #qrcode{
+  .qrcode{
     margin: 10px auto;
     width: 80px;
     height: 80px;
@@ -38,159 +38,72 @@
   <div id="cp">
     <h2>Voting System base on TrustNote</h2>
     <div class="panel panel-default">
-      <div class="panel-heading" id="wallet_amount">Votings</div>
+      <div class="panel-heading" id="name"></div>
       <div class="panel-body">
         <div class="form-group">
-          <pre id="votings"></pre>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">Transaction</div>
-      <div class="panel-body">
-        <div class="form-group">
-          <div class="alert alert-danger" role="alert" id="address_err" style="display:none">address error</div>
-          <input class="form-control" type="text" id="payment_address" placeholder="address" value="">
+          <div id="select"></div>
         </div>
         <div class="form-group">
-          <div class="alert alert-danger" role="alert" id="amount_err" style="display:none">amount error</div>
-          <input class="form-control" type="text" id="payment_amount" placeholder="amount" value="">
+          <input class="form-control" type="text" id="select_name" placeholder="input select_name for voting" value="">
         </div>
-        <div class="form-group">
-          <input class="form-control" type="text" id="payment_memo" placeholder="memo" value="">
-        </div>
-        <button class="btn btn-primary" type="button" id="payment_btn">Confirm</button>
+        <button class="btn btn-primary" type="button" id="add">add a select</button>
       </div>
     </div>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">Set</div>
-      <div class="panel-body">
-        <button class="btn btn-primary" type="button" id="export_keys">export seed phrase</button>
-        <button class="btn btn-primary disabled" disabled type="button" id="import_keys">import seed phrase (coming soon)</button>
-      </div>
-    </div>
-
   </div>
 
 
   <script type="text/javascript">
-
-  function get_wallet_amount(){
-    $.getJSON("/api/balance",function(json){
+  function get_select(){
+    $.getJSON("/api/voting/{{index}}",function(json){
       console.log(json);
-      if(json.hasOwnProperty("stable")){
-        var stable=json.stable;
-        $("#wallet_amount").text(stable+" MN");
+      $("#name").text(json.voting.name);
+
+
+      $("#select").text("");
+      for (var i in json.selectlist) {
+        var select=json.selectlist[i];
+        var address=select.address;
+        var name=select.name;
+        var li=$("<pre></pre>");
+        var a=$("<a></a>");
+
+        var p=$("<p></p>");
+        p.text(address);
+
+        var value=$("<p>0</p>");
+        value.attr("id",address);
+
+        var img=$("<div class='qrcode' id='qrcode_"+i+"'></div>");
+
+        a.text(name);
+        li.append(a);
+        li.append(value);
+
+        li.append(img);
+        li.append(p);
+
+        $("#select").append(li);
+      }
+      for (var i in json.selectlist) {
+
+        var address=select.address;
+
+        $('#qrcode_'+i).qrcode(address);
       }
 
-      if(json.hasOwnProperty("balance")){
-        var balance=json.balance;
-        //$("#wallet_amount").text(balance+" MN");
-      }
-
-      if(json.hasOwnProperty("pending")){
-         var pending=json.pending;
-         if(pending==0){
-           $("#wallet_amount").css("color","green")
-         }else{
-           $("#wallet_amount").css("color","red")
-         }
-      }
-      // if(json.hasOwnProperty("pending")){
-      //   pending=json.pending;
-      //   if(pending!=0){
-      //     $("#pending").text(pending+" MN(pending)");
-      //     $("#pending").show();
-      //   }else{
-      //     $("#pending").hide();
-      //   }
-      // }
     });
   }
 
-  function get_wallet_address_list(){
-    $.getJSON("/api/address",function(json){
-      // for (var i in json) {
-      //   var address=json[i];
-      //   var li=$("<pre></pre>");
-      //   var a=$("<a></a>");
-      //   a.attr("href","/wallet/"+address);
-      //   a.text(address);
-      //   li.append(a);
-      //   $("#address_list").append(li);
-      // }
-      $("#address").text(json[0]);
-      $('#qrcode').qrcode(json[0]);
-    });
-  }
-
-
-
-
-  get_wallet_amount();
-
-  get_wallet_address_list();
-
-  setInterval(function(){
-    get_wallet_amount();
-  },3000);
-
-
-  $("#export_keys").click(function(){
-    $.getJSON("/api/keys",function(json){
-      $("#json").JSONView(json, { collapsed: true });
-      console.log(json);
-      $("#Modal").modal();
+  $("#add").click(function(){
+    var select_name = $("#select_name").val();
+    $.post("/api/select/add",{name:select_name,voting_id:{{index}}},function(json){
+      $("#select_name").val("");
+      console.log(json)
+      get_select();
     });
   });
 
-  $("#payment_btn").click(function(){
-    var address=$("#payment_address").val();
-    var amount=parseFloat($("#payment_amount").val());
-    var memo=$("#payment_memo").val();
-
-    if(address.length!=32){
-      $("#address_err").show();
-
-    }else{
-      if(amount>0){
-        $("#amount_err").hide();
-
-        $.getJSON("/api/address/"+address,function(json){
-          console.log(json);
-          if(json===true){
-            //
-            $("#address_err").hide();
-            var api_url="/api/pay";
-            $.post(api_url,{address:address,amount:amount,text:memo},function(json){
-              //$("#json").JSONView(json, { collapsed: true });
-              var a=$("<a></a>");
-              a.attr("href","http://dev.trustnote.org:3000/detail#"+json);
-              a.text("visit info at explorer")
-              $("#json").append(a);
-              console.log(json);
-              $("#Modal").modal();
-              $("#payment_address").val("");
-              $("#payment_amount").val("");
-              $("#payment_memo").val("");
-            });
-
-            //
-          }else{
-            $("#address_err").show();
-            //$("#json").text("address error");
-            //$("#Modal").modal();
-          }
-        });
-      }else{
-        $("#amount_err").show();
-      }
-
-
-    }
-  });
+  get_select()
   </script>
 
   <!-- Modal -->

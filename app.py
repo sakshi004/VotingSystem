@@ -23,8 +23,12 @@ def update_votings_index():
 update_votings_index()
 
 @app.route('/',methods=['GET'])
-def home():
+def votings():
     return render_template("votings.html")
+
+@app.route('/voting/<string:index>',methods=['GET'])
+def voting(index):
+    return render_template("voting.html",index=index)
 
 @app.route('/set',methods=['GET'])
 def set():
@@ -58,6 +62,46 @@ def votings_all():
     db.close()
 
     return jsonify(json)
+
+@app.route('/api/voting/<string:index>',methods=['GET'])
+def votings_of(index):
+    json={}
+    voting={}
+    selectlist=[]
+
+    db = dbm.open('db/votings', 'c')
+    if index in db:
+        voting["index"] = index
+        voting["name"] = db[index].decode('utf-8')
+        json["voting"]=voting
+    else:
+        json="error"
+    db.close()
+
+    db = dbm.open("db/voting_{0}".format(index), 'c')
+
+    for key in db.keys():
+        select = {}
+        select["name"] = key.decode('utf-8')
+        select["address"] = db[key].decode('utf-8')
+        selectlist.append(select)
+    
+    db.close()
+    json["selectlist"]=selectlist
+    return jsonify(json)
+
+@app.route('/api/select/add',methods=['POST'])
+def select_add():
+    if request.method == 'POST':
+        name=request.form.get('name')
+        address=rpc.make_a_new_address()
+        voting_id=request.form.get('voting_id')
+
+        db = dbm.open("db/voting_{0}".format(voting_id), 'c')
+        db[name] = address
+        db.close()
+
+        return jsonify("ok")
 
 # RPC apis
 

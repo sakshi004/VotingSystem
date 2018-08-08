@@ -99,7 +99,7 @@
         $(val).qrcode(address);
 
       });
-      
+
 
     });
   }
@@ -145,6 +145,7 @@
       console.log("progress",progress,id)
 
       $("."+id).css("width",progress+"%");
+      $("."+id).text(progress+"%");
     });
 
 

@@ -75,6 +75,7 @@
 
 
         var img=$("<div class='qrcode' id='qrcode_"+i+"'></div>");
+        img.attr("address",address);
 
         a.text(name);
         li.append(a);
@@ -83,14 +84,22 @@
         li.append(img);
         li.append(p);
 
+        var progress=$('<div class="progress"></div>');
+        var progress_bar=$('<div id="progress_'+i+'" class="progress-bar" role="progressbar" style="min-width: 2em; width:0%;">0%</div>')
+        progress_bar.addClass(address);
+        progress.append(progress_bar);
+
+        li.append(progress);
+
         $("#select").append(li);
       }
-      for (var i in json.selectlist) {
 
-        var address=select.address;
+      $('.qrcode').each( function( index, val ) {
+        var address=$(val).attr("address");
+        $(val).qrcode(address);
 
-        $('#qrcode_'+i).qrcode(address);
-      }
+      });
+      
 
     });
   }
@@ -118,11 +127,32 @@
 
     });
 
+
+    all_amount=0;
+    $('.amount').each( function( index, val ) {
+      var id=$(val).attr("id");
+      var amount = $("#"+id).text();
+      all_amount+=parseInt(amount);
+    });
+
+    $('.amount').each( function( index, val ) {
+      var id=$(val).attr("id");
+      var amount = $("#"+id).text();
+      amount = parseInt(amount);
+
+      progress = amount/all_amount*100;
+
+      console.log("progress",progress,id)
+
+      $("."+id).css("width",progress+"%");
+    });
+
+
   }
 
   setInterval(function(){
     get_amount();
-  },3000)
+  },1000)
   </script>
 
   <!-- Modal -->

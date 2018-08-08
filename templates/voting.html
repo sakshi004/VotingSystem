@@ -70,8 +70,9 @@
         var p=$("<p></p>");
         p.text(address);
 
-        var value=$("<p>0</p>");
+        var value=$("<p class='amount'>0</p>");
         value.attr("id",address);
+
 
         var img=$("<div class='qrcode' id='qrcode_"+i+"'></div>");
 
@@ -103,7 +104,25 @@
     });
   });
 
-  get_select()
+  get_select();
+
+  function get_amount(){
+    $('.amount').each( function( index, val ) {
+
+      var id=$(val).attr("id");
+
+      console.log("/api/balance/"+id);
+      $.getJSON("/api/balance/"+id,function(json){
+        $("#"+id).text(json);
+      });
+
+    });
+
+  }
+
+  setInterval(function(){
+    get_amount();
+  },3000)
   </script>
 
   <!-- Modal -->

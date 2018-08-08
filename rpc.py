@@ -55,15 +55,23 @@ def get_balance_of(address):
     method="getaddressbalance"
     payload = {
         "method": method,
-        "params": {},
+        "params": [address],
         "jsonrpc": "2.0",
         "id": 1,
     }
     content = json.loads(get_result(payload))
-    pending=(content["result"]["base"]["pending"])/1000000
-    stable=(content["result"]["base"]["stable"])/1000000
-    balance=pending+stable
-    return {"balance":balance,"pending":pending,"stable":stable}
+    content = content["result"]
+    if "objBalance" in content:
+        objBalance = content["objBalance"]
+
+        if "bytes" in objBalance:
+            bytes= objBalance["bytes"]
+            mn = bytes/1000000
+            return mn
+        else:
+            return "error"
+    else:
+        return 0
 
 
 def check_address(address):

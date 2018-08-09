@@ -74,7 +74,8 @@
     $.post("/api/votings/add",{name:voting_name},function(json){
       $("#voting_name").text("");
       console.log(json)
-      get_votings();
+      //get_votings();
+      window.location.href="/voting/"+json;
     });
   });
 

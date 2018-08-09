@@ -139,11 +139,11 @@
       var id=$(val).attr("id");
       var amount = $("#"+id).text();
       amount = parseInt(amount);
-
-      progress = amount/all_amount*100;
-
+      var progress=0;
+      if(amount>0){
+        progress = amount/all_amount*100;
+      }
       console.log("progress",progress,id)
-
       $("."+id).css("width",progress+"%");
       $("."+id).text(progress+"%");
     });

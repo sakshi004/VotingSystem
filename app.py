@@ -6,7 +6,7 @@ import rpc,json
 import os
 import dbm
 
-
+#更新 投票的index，用作新建投票时指定序列。
 
 def update_votings_index():
     db = dbm.open('db/votings_index', 'c')
@@ -26,6 +26,7 @@ update_votings_index()
 def votings():
     return render_template("votings.html")
 
+#index为index的投票
 @app.route('/voting/<string:index>',methods=['GET'])
 def voting(index):
     return render_template("voting.html",index=index)
@@ -34,6 +35,7 @@ def voting(index):
 def set():
     return render_template("set.html")
 
+#添加一个投票
 @app.route('/api/votings/add',methods=['POST'])
 def votings_add():
     if request.method == 'POST':
@@ -49,6 +51,8 @@ def votings_add():
 
         return jsonify(votings_index)
 
+#获得全部投票
+
 @app.route('/api/votings',methods=['GET'])
 def votings_all():
     json=[]
@@ -63,6 +67,7 @@ def votings_all():
 
     return jsonify(json)
 
+#获得index为index的投票
 @app.route('/api/voting/<string:index>',methods=['GET'])
 def votings_of(index):
     json={}
@@ -85,11 +90,12 @@ def votings_of(index):
         select["name"] = key.decode('utf-8')
         select["address"] = db[key].decode('utf-8')
         selectlist.append(select)
-    
+
     db.close()
     json["selectlist"]=selectlist
     return jsonify(json)
 
+#添加投票选项
 @app.route('/api/select/add',methods=['POST'])
 def select_add():
     if request.method == 'POST':

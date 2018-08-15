@@ -57,12 +57,12 @@ node rpc_service.js
 
 在投票系统目录下执行：
 ```
-python3 app.py -p 5000
+python3 app.py -p 8000
 ```
 
 ### 体验
 
-打开浏览器，访问：http://localhost:5000
+打开浏览器，访问：http://localhost:8000
 
 ### 演示
 

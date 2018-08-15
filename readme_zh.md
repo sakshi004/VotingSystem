@@ -9,13 +9,13 @@
 ### 安装
 
 ```
-sudo pip install -r install
+sudo pip3 install -r install
 ```
 
 ### 运行
 
 ```
-python app.py -p 5000
+python3 app.py -p 5000
 ```
 
 ### 体验

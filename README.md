@@ -9,7 +9,7 @@
 The system first imports pythonSDK, the SDK file is rpc.py, which is the interface that Python calls headlessRPC.
 
 ```
-Import rpc
+import rpc
 ```
 
 Each voting option generates a unique TrustNote wallet address.
@@ -17,7 +17,7 @@ Each voting option generates a unique TrustNote wallet address.
 Key code:
 
 ```
-Rpc.make_a_new_address()
+rpc.make_a_new_address()
 ```
 
 Users need to use the TrustNote wallet to scan the code. The voting process is the process of transferring money to the option's TrustNote wallet.
@@ -29,7 +29,7 @@ For each voting option, the balance is checked every 2-3 seconds, and the percen
 Key code:
 
 ```
-Rpc.get_balance_of(address)
+rpc.get_balance_of(address)
 ```
 
 ### install
@@ -39,17 +39,17 @@ The voting system needs to be used with headlessRPC.
 1. Install headlessRPC
 
 ```
-Git clone https://github.com/TrustNoteDevelopers/RPC.git
-Cd RPC
-Npm install
+git clone https://github.com/TrustNoteDevelopers/RPC.git
+cd RPC
+npm install
 ```
 
 2. Installation voting system
 
 ```
-Git clone https://github.com/TrustNoteSamples/VotingSystem.git
-Cd VotingSystem
-Sudo pip3 install -r install
+git clone https://github.com/TrustNoteSamples/VotingSystem.git
+cd VotingSystem
+pip3 install -r install
 ```
 
 ### run
@@ -58,7 +58,7 @@ Sudo pip3 install -r install
 Execute in the headlessRPC directory:
 
 ```
-Node rpc_service.js
+node rpc_service.js
 ```
 
 Running the voting system
@@ -66,7 +66,7 @@ Running the voting system
 Execute in the voting system directory:
 
 ```
-Python3 app.py -p 8000
+python3 app.py -p 8000
 ```
 
 ### Experience

@@ -39,6 +39,8 @@ npm install
 
 2. 安装投票系统
 ```
+git clone https://github.com/TrustNoteSamples/VotingSystem.git
+cd VotingSystem
 sudo pip3 install -r install
 ```
 

@@ -1,9 +1,10 @@
-### A Simple Blockchain Voting System
+## A Simple Blockchain Voting System
 
-Description
+### Description
 
 This is a blockchain voting system based on TrustNote, developed using Python Flask.
-Principle
+
+### Principle
 
 The system first imports pythonSDK, the SDK file is rpc.py, which is the interface that Python calls headlessRPC.
 
@@ -31,7 +32,7 @@ Key code:
 rpc.get_balance_of(address)
 ```
 
-Installation
+### Installation
 
 
 The voting system needs to be used with headlessRPC.
@@ -57,7 +58,7 @@ cd VotingSystem
 pip3 install -r install
 ```
 
-Run
+### Run
 
 1. Run headlessRPC Execute in the headlessRPC directory:
 
@@ -73,11 +74,11 @@ Execute in the voting system directory:
 python3 app.py -p 8000
 ```
 
-Experience
+### Experience
 
 Open your web browser and visit: http://localhost:8000
 
-Demonstration
+### Demonstration
 
 We recorded the video and can watch it from at https://github.com/TrustNoteSamples/VotingSystem/raw/master/demo.mp4.
 

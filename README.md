@@ -6,7 +6,7 @@
 
 ### principle
 
-The system first imports pythonSDK, the SDK file is rpc.py, which is the interface that Python calls headlessRPC.
+The system first imports [pythonSDK](https://github.com/TrustNoteDevelopers/pythonSDK), the SDK file is rpc.py, which is the interface that Python calls [headlessRPC](https://github.com/TrustNoteDevelopers/RPC).
 
 ```
 import rpc
